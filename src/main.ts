@@ -1,4 +1,5 @@
 import { isValidCpf } from './cpf-validator';
+import { Order } from './order';
 
 interface ICreateOrder {
   productName: string;
@@ -30,15 +31,20 @@ const products = [
 
 export const createOrder = (input: ICreateOrderIn) => {
   if (!isValidCpf(input.cpf)) throw new Error('Cpf is invalid');
-  let total = 0;
+  const order = new Order();
   for (let i = 0; i < input.order.length; i++) {
     const product = products.find(
       (product) => product.productName === input.order[i].productName
     );
     if (product) {
-      total += product.price * input.order[i].amount;
+      order.addProduct({
+        name: product.productName,
+        price: product.price,
+        quantity: input.order[i].amount,
+      });
     }
   }
+  let total = order.getTotal();
   if (input.coupom) {
     const coupom = coupons.find((coupom) => coupom.code === input.coupom);
     if (coupom) total -= (total * coupom.percentage) / 100;
