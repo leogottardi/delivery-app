@@ -1,5 +1,5 @@
 interface IProductOrder {
-  value: number;
+  price: number;
   amount: number;
   description: string;
 }
@@ -16,7 +16,7 @@ export class Order {
 
   addProduct(product: IProductOrder) {
     this.products.push(product);
-    this.total += product.value * product.amount;
+    this.total += product.price * product.amount;
   }
 
   addCupom(cupom: ICupomOrder) {
